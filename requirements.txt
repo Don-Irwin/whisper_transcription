@@ -1,0 +1,14 @@
+# Core transcription engine (default).
+# faster-whisper decodes audio itself through PyAV, which bundles its own FFmpeg
+# libraries, so it reads opus, wav (including 32-bit float), mp3, m4a, flac, etc.
+faster-whisper>=1.1.0
+
+# Used by faster-whisper's silence detection (VAD). onnxruntime 1.22+ ships
+# binaries that need macOS 13.4 or later (they install but fail to load on older
+# releases). platform_release is the Darwin kernel version: 22.5 = macOS 13.4.
+onnxruntime<1.22; sys_platform == "darwin" and platform_release < "22.5"
+
+# Optional fallback engine: OpenAI's reference Whisper implementation.
+# It pulls in PyTorch (~1 GB) and needs the `ffmpeg` command on PATH.
+# bootstrap.sh installs it only when run with --with-openai-whisper,
+# using requirements-openai.txt.
