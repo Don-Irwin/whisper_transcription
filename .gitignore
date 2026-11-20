@@ -221,3 +221,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Live dictation session transcripts (transcribe_app.py)
+dictation_*.txt

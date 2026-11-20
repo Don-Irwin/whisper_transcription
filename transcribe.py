@@ -93,8 +93,12 @@ class OpenAIWhisperEngine:
     def __init__(self, model: str, threads: int, device: str = "cpu"):
         import whisper  # ImportError if not installed
 
+        venv_bin = str(Path(sys.executable).parent)  # bootstrap's fallback ffmpeg
+        if not shutil.which("ffmpeg") and venv_bin not in os.environ.get("PATH", ""):
+            os.environ["PATH"] = os.environ.get("PATH", "") + os.pathsep + venv_bin
         if not shutil.which("ffmpeg"):
-            raise RuntimeError("openai-whisper needs the `ffmpeg` command: brew install ffmpeg")
+            raise RuntimeError("openai-whisper needs the `ffmpeg` command: run ./bootstrap.sh "
+                               "or brew install ffmpeg")
         try:
             import torch
             torch.set_num_threads(threads)
